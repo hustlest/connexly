@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+@theme {
+  /* Primary */
+  --color-navy: #001a3f;
+  --color-navy-deep: #000e24;
+  --color-navy-panel: #04234f;
+  --color-blue: #346585;
+
+  /* Accent */
+  --color-orange: #ed7d31;
+  --color-orange-bright: #f5a468;
+
+  /* Secondary */
+  --color-sage: #c7dcca;
+  --color-sage-bright: #9fe0b2;
+  --color-bone: #e7e2db;
+  --color-paper: #fbfaf8;
+
+  /* Status */
+  --color-status-green: #5dc97f;
+  --color-status-amber: #ed7d31;
+  --color-status-blue: #5b8cb0;
+  --color-status-red: #e38266;
+
+  /* Lines */
+  --color-line-dark: rgba(231, 226, 219, 0.14);
+  --color-line-light: rgba(0, 26, 63, 0.12);
+
+  --font-sans: var(--font-inter), "Inter", Arial, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-navy);
+  color: var(--color-bone);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--color-orange);
+  color: #fff;
+}
+
+/* Data / label text set in Inter but tuned to read like tabular data */
+.text-data {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-orange);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  opacity: 0;
+}
+
+.reveal.is-visible {
+  animation: reveal-up 0.6s ease-out forwards;
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-track {
+  animation: ticker-scroll 38s linear infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee var(--duration, 30s) linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: marquee var(--duration, 30s) linear infinite reverse;
+}

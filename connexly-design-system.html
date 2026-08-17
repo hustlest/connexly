@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexly — Design System</title>
+<style>
+  :root{
+    --navy:#001A3F;
+    --navy-2:#04234F;
+    --blue:#346585;
+    --orange:#ED7D31;
+    --machine:#C7DCCA;
+    --human:#E7E2DB;
+    --line-dark: rgba(231,226,219,0.14);
+    --line: rgba(0,26,63,0.12);
+    --paper:#FBFAF8;
+    --mono: "SF Mono", "Roboto Mono", Consolas, monospace;
+    --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--navy);color:var(--human);font-family:var(--sans);}
+  body{font-weight:300;-webkit-font-smoothing:antialiased;}
+  a{color:var(--machine);}
+
+  /* ===== Layout shell ===== */
+  .rail{
+    position:fixed; top:0; left:0; bottom:0; width:220px;
+    background:#000E24; color:var(--human);
+    padding:32px 24px; overflow-y:auto; border-right:1px solid var(--line-dark);
+  }
+  .rail .mark{display:block; width:150px; margin-bottom:36px;}
+  .rail nav a{
+    display:block; color:rgba(231,226,219,0.62); text-decoration:none;
+    font-size:13px; letter-spacing:.04em; padding:7px 0; border-bottom:1px solid var(--line-dark);
+  }
+  .rail nav a:hover{color:#fff;}
+  .rail .foot{position:absolute; bottom:28px; left:24px; right:24px; font-size:11px; color:rgba(231,226,219,0.35); letter-spacing:.03em;}
+
+  main{margin-left:220px; padding:0 0 120px;}
+
+  section{padding:88px 64px; border-bottom:1px solid var(--line-dark); max-width:1180px;}
+  section.on-light{background:var(--paper); color:var(--navy); max-width:none; border-bottom:1px solid var(--line);}
+  section.on-light .inner{max-width:1180px;}
+  section:first-of-type{padding-top:72px;}
+  .eyebrow{
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--orange); margin-bottom:14px; font-weight:600;
+  }
+  h1{font-size:56px; font-weight:300; letter-spacing:-.01em; margin:0 0 18px; color:#fff; line-height:1.05;}
+  h2{font-size:34px; font-weight:700; margin:0 0 12px; color:#fff; letter-spacing:-.01em;}
+  .on-light h1, .on-light h2{color:var(--navy);}
+  h3{font-size:19px; font-weight:700; margin:0 0 8px; color:#fff;}
+  .on-light h3{color:var(--navy);}
+  p.lede{font-size:18px; font-weight:300; max-width:640px; color:rgba(231,226,219,0.78); line-height:1.55;}
+  p.note{font-size:14px; color:rgba(231,226,219,0.62); max-width:640px; line-height:1.6;}
+  .on-light p.note{color:#5A6B7D;}
+
+  /* ===== Hero ===== */
+  .hero{background:linear-gradient(180deg,#000E24 0%, var(--navy) 100%); padding:110px 64px 86px; margin-left:220px; border-bottom:1px solid var(--line-dark);}
+  .hero-swatches{display:flex; gap:0; margin-top:48px; border-radius:2px; overflow:hidden; max-width:640px; height:14px;}
+  .hero-swatches div{flex:1;}
+  .stat-row{display:flex; gap:56px; margin-top:56px; flex-wrap:wrap;}
+  .stat{border-left:2px solid var(--orange); padding-left:16px;}
+  .stat .n{font-size:32px; font-weight:700; color:#fff; line-height:1;}
+  .stat .l{font-size:12px; color:rgba(231,226,219,0.55); margin-top:6px; font-family:var(--mono); text-transform:uppercase; letter-spacing:.05em;}
+
+  /* ===== Surface (light card on dark canvas) ===== */
+  .surface{background:var(--paper); border-radius:3px; color:var(--navy);}
+
+  /* ===== Color ===== */
+  .swatch-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:36px;}
+  .swatch{background:var(--paper); padding:0;}
+  .swatch .chip{height:132px;}
+  .swatch .info{padding:16px 16px 20px;}
+  .swatch .role{font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:#7C8A9A; font-family:var(--mono); margin-bottom:6px;}
+  .swatch .hex{font-family:var(--mono); font-size:15px; font-weight:600; color:var(--navy); margin-bottom:10px;}
+  .swatch .meta{font-family:var(--mono); font-size:10.5px; color:#8994A2; line-height:1.7;}
+
+  .usage-row{display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; margin-top:28px; background:rgba(231,226,219,0.14); border:1px solid rgba(231,226,219,0.14);}
+  .usage-card{padding:24px 22px 26px; background:#04234F;}
+  .usage-card .dot{width:10px;height:10px;border-radius:2px;margin-bottom:14px;}
+  .usage-card h4{margin:0 0 6px; font-size:15px; font-weight:700; color:#fff;}
+  .usage-card p{margin:0; font-size:13px; color:rgba(231,226,219,0.6); line-height:1.55;}
+
+  /* ===== Type ===== */
+  .weight-demo{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; margin-top:32px; background:rgba(231,226,219,0.14); border:1px solid rgba(231,226,219,0.14);}
+  .weight-demo .card{padding:24px; background:#04234F;}
+  .weight-demo .glyphs{font-size:34px; color:#fff; margin-bottom:14px;}
+  .weight-demo .name{font-size:13px; font-weight:700; color:#fff;}
+  .weight-demo .use{font-size:12px; color:rgba(231,226,219,0.55); margin-top:3px; font-family:var(--mono);}
+  .stack-box{margin-top:28px; background:#000E24; color:#B9E3C6; font-family:var(--mono); font-size:12.5px; padding:18px 22px; border-radius:2px; overflow-x:auto; border:1px solid var(--line-dark);}
+
+  .type-row{display:flex; align-items:baseline; justify-content:space-between; padding:22px 0; border-top:1px solid var(--line);}
+  .type-row:last-child{border-bottom:1px solid var(--line);}
+  .type-row .sample{color:var(--navy);}
+  .type-row .label{font-family:var(--mono); font-size:11px; color:#8994A2; white-space:nowrap; padding-left:24px;}
+
+  /* ===== Logo ===== */
+  .logo-pair{display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:32px; background:var(--line-dark); border:1px solid var(--line-dark);}
+  .logo-cell{display:flex; align-items:center; justify-content:center; height:220px; position:relative;}
+  .logo-cell.light{background:var(--paper);}
+  .logo-cell.dark{background:#000E24;}
+  .logo-cell img{height:56px;}
+  .logo-cell .tag{position:absolute; bottom:16px; left:20px; font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;}
+  .logo-cell.light .tag{color:#8994A2;}
+  .logo-cell.dark .tag{color:rgba(231,226,219,0.5);}
+  .clearspace{margin-top:32px; border:1px dashed rgba(231,226,219,0.3); padding:40px; display:flex; justify-content:center;}
+  .clearspace img{height:44px; filter:brightness(0) invert(1);}
+  .dos{display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:28px; background:var(--line-dark); border:1px solid var(--line-dark);}
+  .do-card{padding:22px; background:#04234F;}
+  .do-card .flag{font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; margin-bottom:10px; font-weight:700;}
+  .do-card.yes .flag{color:#87D19E;}
+  .do-card.no .flag{color:#E38266;}
+  .do-card li{font-size:13px; color:rgba(231,226,219,0.65); margin-bottom:5px;}
+
+  /* ===== Spacing / grid ===== */
+  .scale-row{display:flex; align-items:center; gap:18px; margin:14px 0;}
+  .scale-row .bar{background:var(--orange); height:14px;}
+  .scale-row .lab{font-family:var(--mono); font-size:12px; color:rgba(231,226,219,0.6); width:120px;}
+
+  /* ===== Components ===== */
+  .comp-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:32px; background:var(--line-dark); border:1px solid var(--line-dark);}
+  .comp-card{background:#04234F; padding:28px;}
+  .comp-card .lab{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:rgba(231,226,219,0.5); margin-bottom:18px;}
+
+  .btn{font-family:var(--sans); font-size:14px; font-weight:700; padding:12px 22px; border-radius:3px; border:none; cursor:pointer; letter-spacing:.01em;}
+  .btn-primary{background:var(--orange); color:#fff;}
+  .btn-secondary{background:transparent; color:#fff; border:1.5px solid rgba(231,226,219,0.5);}
+  .btn-ghost{background:transparent; color:var(--machine); border:none; text-decoration:underline;}
+  .btn-row{display:flex; gap:12px; flex-wrap:wrap;}
+
+  .badge{display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:11px; font-weight:600; padding:5px 10px; border-radius:20px; letter-spacing:.03em;}
+  .badge .d{width:6px;height:6px;border-radius:50%;}
+  .badge.complete{background:rgba(199,220,202,0.16); color:#9FE0B2;}
+  .badge.complete .d{background:#5DC97F;}
+  .badge.pending{background:rgba(237,125,49,0.16); color:#F5A468;}
+  .badge.pending .d{background:var(--orange);}
+  .badge.review{background:rgba(52,101,133,0.25); color:#8FB8D6;}
+  .badge.review .d{background:#5B8CB0;}
+
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:12px; font-weight:700; color:#fff; margin-bottom:6px;}
+  .field input{width:100%; font-family:var(--sans); font-size:14px; font-weight:300; padding:11px 12px; border:1.5px solid rgba(231,226,219,0.3); border-radius:3px; color:#fff; background:rgba(255,255,255,0.04);}
+  .field input::placeholder{color:rgba(231,226,219,0.4);}
+  .field input:focus{outline:none; border-color:var(--orange);}
+
+  .listing-card{border-radius:3px; padding:20px; background:var(--paper); color:var(--navy);}
+  .listing-card .top{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;}
+  .listing-card .block{font-family:var(--mono); font-weight:700; font-size:16px; color:var(--navy);}
+  .listing-card .sub{font-size:12px; color:#7C8A9A; margin-top:2px;}
+  .listing-card .price{font-size:20px; font-weight:700; color:var(--orange);}
+  .listing-card .price span{font-size:11px; color:#8994A2; font-weight:400; display:block; font-family:var(--sans);}
+  .listing-card .meta-row{display:flex; gap:18px; padding-top:14px; border-top:1px solid var(--line); font-size:12px; color:#5A6B7D;}
+
+  /* marquee strip */
+  .marquee{margin-top:36px; border-top:1px solid var(--line-dark); border-bottom:1px solid var(--line-dark); padding:20px 0; display:flex; gap:48px; overflow:hidden;}
+  .marquee span{font-family:var(--mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:rgba(231,226,219,0.4); white-space:nowrap;}
+
+  /* testimonial */
+  .test-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:32px; background:var(--line-dark); border:1px solid var(--line-dark);}
+  .test-card{background:#04234F; padding:26px;}
+  .test-card .stars{color:var(--orange); font-size:13px; letter-spacing:.1em; margin-bottom:14px;}
+  .test-card p{font-size:14px; color:rgba(231,226,219,0.8); line-height:1.55; margin:0 0 16px;}
+  .test-card .who{font-size:13px; font-weight:700; color:#fff;}
+  .test-card .org{font-size:12px; color:rgba(231,226,219,0.5);}
+
+  table.log{width:100%; border-collapse:collapse; font-size:13px;}
+  table.log th{text-align:left; font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:#8994A2; padding-bottom:10px; border-bottom:1.5px solid var(--navy); font-weight:600;}
+  table.log td{padding:12px 12px 12px 0; border-bottom:1px solid var(--line); color:#33465C;}
+  table.log td:first-child, table.log th:first-child{padding-left:0;}
+
+  code.inline{font-family:var(--mono); background:var(--machine); color:#22432B; padding:2px 6px; border-radius:2px; font-size:12.5px;}
+
+  ::selection{background:var(--orange); color:#fff;}
+</style>
+</head>
+<body>
+
+<aside class="rail">
+  <svg class="mark" viewBox="0 0 200 45" xmlns="http://www.w3.org/2000/svg">
+    <text x="0" y="34" font-family="Georgia, serif" font-weight="700" font-size="36" fill="#E7E2DB">connexly</text>
+  </svg>
+  <nav>
+    <a href="#foundations">Foundations</a>
+    <a href="#inspiration">Direction</a>
+    <a href="#color">Color</a>
+    <a href="#type">Typography</a>
+    <a href="#logo">Logo usage</a>
+    <a href="#grid">Spacing &amp; grid</a>
+    <a href="#components">Components</a>
+    <a href="#patterns">Applied patterns</a>
+  </nav>
+  <div class="foot">Connexly Design System<br>v1.1 · Web · Dark-first</div>
+</aside>
+
+<main>
+
+  <section class="hero" id="foundations">
+    <div class="eyebrow">Design System — v1.1</div>
+    <h1>A dark canvas for<br>a live network.</h1>
+    <p class="lede">Connexly runs on a dark navy canvas by default now — the site should feel like an operations console for a live market, not a brochure. Light "paper" surfaces are reserved for the moments people are reading, filling in, or scanning dense data: forms, listing cards, tables. Everything else lives on navy, with orange doing the one job of pointing at what to do next.</p>
+    <div class="hero-swatches">
+      <div style="background:#001A3F"></div><div style="background:#346585"></div><div style="background:#ED7D31"></div><div style="background:#C7DCCA"></div><div style="background:#E7E2DB"></div>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="n">/8–/24</div><div class="l">Block sizes traded</div></div>
+      <div class="stat"><div class="n">2</div><div class="l">Live product surfaces</div></div>
+      <div class="stat"><div class="n">30+</div><div class="l">Years in business</div></div>
+    </div>
+  </section>
+
+  <!-- INSPIRATION -->
+  <section id="inspiration">
+    <div class="eyebrow">00 — Direction</div>
+    <h2>Reference: promo-tech-store.vercel.app/awwwards</h2>
+    <p class="lede">That site sells industrial automation parts — a different market, but the same underlying job as Connexly: a technical, inventory-driven B2B product trying not to feel like a spreadsheet. It's a useful reference for tone, not for color.</p>
+    <p class="note">What we're borrowing: a dark canvas as the default rather than an accent; an oversized, confident headline that states the value prop in one line; stat callouts placed right under the hero instead of buried in an About page; catalog cards built for scanning and quick action, not browsing; a testimonial grid that reads as evidence, not decoration; and a full-bleed dark band to close the page on a single action. What we're not borrowing: their near-black-and-white palette. Connexly stays navy, blue, orange, machine green, and human cream throughout — the dark-first layout is a structural choice, the color identity doesn't move.</p>
+  </section>
+
+  <!-- COLOR -->
+  <section class="on-light" id="color">
+    <div class="inner">
+    <div class="eyebrow">01 — Color</div>
+    <h2>Palette</h2>
+    <p class="note">Two primaries carry structure and trust; three secondaries carry meaning. Orange is reserved — it means action or a live/pending state, never decoration. This section runs on the light surface so hex values and print references stay legible; production UI now defaults to the dark canvas below.</p>
+
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="chip" style="background:#001A3F"></div>
+        <div class="info">
+          <div class="role">Primary · Navy</div>
+          <div class="hex">#001A3F</div>
+          <div class="meta">RGB 0 26 63<br>PANTONE 648 C<br>CMYK 25 15 0 75</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#346585"></div>
+        <div class="info">
+          <div class="role">Primary · Blue</div>
+          <div class="hex">#346585</div>
+          <div class="meta">RGB 52 101 133<br>PANTONE 647 C<br>CMYK 32 13 0 48</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#ED7D31"></div>
+        <div class="info">
+          <div class="role">Secondary · Accent</div>
+          <div class="hex">#ED7D31</div>
+          <div class="meta">RGB 237 125 49<br>PANTONE 164 C<br>CMYK 0 44 74 7</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#C7DCCA"></div>
+        <div class="info">
+          <div class="role">Secondary · Machine</div>
+          <div class="hex">#C7DCCA</div>
+          <div class="meta">RGB 220 235 222<br>PANTONE 621 C<br>CMYK 13 0 10 2</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#E7E2DB"></div>
+        <div class="info">
+          <div class="role">Secondary · Human</div>
+          <div class="hex">#E7E2DB</div>
+          <div class="meta">RGB 231 236 219<br>PANTONE 400 C<br>CMYK 0 3 6 16</div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <section id="color-roles">
+    <h3 style="color:#fff;">Usage roles on the dark canvas</h3>
+    <div class="usage-row">
+      <div class="usage-card">
+        <div class="dot" style="background:#ED7D31"></div>
+        <h4>Accent — Orange</h4>
+        <p>Primary CTAs, active/pending status, the logo's signature dot motif. On navy it's the only warm note in the frame — use once per view as a focal point.</p>
+      </div>
+      <div class="usage-card">
+        <div class="dot" style="background:#C7DCCA"></div>
+        <h4>Machine — Green</h4>
+        <p>Automated / system-generated content on dark surfaces: API responses, transfer-log status, block metadata. Signals "the system did this."</p>
+      </div>
+      <div class="usage-card">
+        <div class="dot" style="background:#E7E2DB"></div>
+        <h4>Human — Cream</h4>
+        <p>Body copy and light-surface cards where a broker or client is reading — forms, listing cards, bios. The one place the canvas turns light on purpose.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TYPE -->
+  <section id="type">
+    <div class="eyebrow">02 — Typography</div>
+    <h2>Helvetica, four ways</h2>
+    <p class="note">The wordmark is the only serif moment in the system. Everything else — UI, body copy, data — is set in Helvetica across four roles: Light for reading, Regular for UI, Oblique for system/inline emphasis, Bold for structure. Nothing sits outside these four.</p>
+
+    <div class="weight-demo">
+      <div class="card">
+        <div class="glyphs" style="font-weight:300;">Aa Bb Cc</div>
+        <div class="name">Helvetica Light — 300</div>
+        <div class="use">body copy, paragraphs, form values</div>
+      </div>
+      <div class="card">
+        <div class="glyphs" style="font-weight:400;">Aa Bb Cc</div>
+        <div class="name">Helvetica Regular — 400</div>
+        <div class="use">nav, table cells, secondary UI</div>
+      </div>
+      <div class="card">
+        <div class="glyphs" style="font-weight:400; font-style:italic;">Aa Bb Cc</div>
+        <div class="name">Helvetica Oblique — 400i</div>
+        <div class="use">system notes, timestamps, inline status</div>
+      </div>
+      <div class="card">
+        <div class="glyphs" style="font-weight:700;">Aa Bb Cc</div>
+        <div class="name">Helvetica Bold — 700</div>
+        <div class="use">headings, labels, buttons, prices</div>
+      </div>
+    </div>
+
+    <div class="stack-box">font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;<br>/* oblique is a style flag, not a family */<br>font-style: italic; /* paired with weight 400 only */<br>/* data / monospace contexts (block ranges, ASNs, logs) */<br>font-family: "SF Mono", "Roboto Mono", Consolas, monospace;</div>
+
+    <p class="note" style="margin-top:18px;"><em style="font-style:italic;">Last synced 2 min ago</em> — an example of Oblique in place: a quiet, secondary system note next to live data, never used for emphasis a reader is meant to act on.</p>
+
+    <div class="surface" style="margin-top:44px; padding:44px;">
+      <div class="type-row"><div class="sample" style="font-size:56px; font-weight:300;">Marketplace</div><div class="label">Display / 56 / Light / -0.01em</div></div>
+      <div class="type-row"><div class="sample" style="font-size:34px; font-weight:700;">Available blocks</div><div class="label">H2 / 34 / Bold</div></div>
+      <div class="type-row"><div class="sample" style="font-size:22px; font-weight:700;">Transfer #TX-4471</div><div class="label">H3 / 22 / Bold</div></div>
+      <div class="type-row"><div class="sample" style="font-size:17px; font-weight:300;">A /24 block, ARIN-region, clean history.</div><div class="label">Body / 17 / Light</div></div>
+      <div class="type-row"><div class="sample" style="font-size:15px; font-weight:400; font-style:italic; color:var(--blue);">Verified 3 hours ago</div><div class="label">System / 15 / Oblique</div></div>
+      <div class="type-row"><div class="sample" style="font-size:13px; font-weight:400; font-family:var(--mono); color:var(--blue);">192.168.14.0/24</div><div class="label">Data / 13 / Mono</div></div>
+      <div class="type-row" style="border-bottom:none;"><div class="sample" style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#7C8A9A;">Status</div><div class="label">Label / 11 / Bold / caps</div></div>
+    </div>
+  </section>
+
+  <!-- LOGO -->
+  <section id="logo">
+    <div class="eyebrow">03 — Logo usage</div>
+    <h2>Wordmark</h2>
+    <p class="note">The three orange dots stand in for binary — the join between the "on" and "off" of a transfer. Never recolor them, separate them from the wordmark, or reproduce the mark below 24px tall on screen. On the dark-first site, the light-background lockup is now the exception, not the rule.</p>
+
+    <div class="logo-pair">
+      <div class="logo-cell dark">
+        <img src="connexly-logo-primary.png" alt="Connexly logo on dark background">
+        <div class="tag">Default — on navy #001A3F</div>
+      </div>
+      <div class="logo-cell light">
+        <img src="connexly-logo-primary.png" alt="Connexly logo on light background">
+        <div class="tag">On light surfaces — #FBFAF8</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:44px;">Clearspace</h3>
+    <p class="note">Minimum clearspace equals the height of the lowercase "c" on all sides. Nothing — text, edges, other marks — enters that zone.</p>
+    <div class="clearspace"><img src="connexly-logo-primary.png" alt="Connexly logo clearspace example"></div>
+
+    <div class="dos">
+      <div class="do-card yes">
+        <div class="flag">Do</div>
+        <ul>
+          <li>Default to the mark on navy across the site</li>
+          <li>Keep the orange dots exactly as supplied</li>
+          <li>Scale proportionally from the master file</li>
+        </ul>
+      </div>
+      <div class="do-card no">
+        <div class="flag">Don't</div>
+        <ul>
+          <li>Place on busy photography or mid-tone backgrounds</li>
+          <li>Recolor the wordmark or dots to match a section accent</li>
+          <li>Stretch, skew, or add drop shadows / effects</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRID -->
+  <section id="grid">
+    <div class="eyebrow">04 — Spacing &amp; grid</div>
+    <h2>An 8px system</h2>
+    <p class="note">All spacing is a multiple of 8px, with 4px for tight, inline adjustments only. Content max-width is 1180px on desktop, with a 12-column grid at 24px gutters; single-column below 768px.</p>
+    <div style="margin-top:28px;">
+      <div class="scale-row"><div class="lab">4 · xs</div><div class="bar" style="width:4px;"></div></div>
+      <div class="scale-row"><div class="lab">8 · sm</div><div class="bar" style="width:8px;"></div></div>
+      <div class="scale-row"><div class="lab">16 · md</div><div class="bar" style="width:16px;"></div></div>
+      <div class="scale-row"><div class="lab">24 · lg</div><div class="bar" style="width:24px;"></div></div>
+      <div class="scale-row"><div class="lab">40 · xl</div><div class="bar" style="width:40px;"></div></div>
+      <div class="scale-row"><div class="lab">64 · 2xl</div><div class="bar" style="width:64px;"></div></div>
+      <div class="scale-row"><div class="lab">96 · section</div><div class="bar" style="width:96px;"></div></div>
+    </div>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section id="components">
+    <div class="eyebrow">05 — Components</div>
+    <h2>Core UI</h2>
+    <p class="note">Marketplace and Transfer Logs aren't new builds — they're <a href="https://ipv4xchange.vercel.app/">ipv4xchange.vercel.app</a> and its <a href="https://ipv4xchange.vercel.app/live-transfer-logs">/live-transfer-logs</a> page, restyled into this system and folded into Connexly's nav. These components are the shared vocabulary both the marketing site and that app should build from.</p>
+
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="lab">Buttons</div>
+        <div class="btn-row">
+          <button class="btn btn-primary">Request a quote</button>
+          <button class="btn btn-secondary">View block</button>
+          <button class="btn btn-ghost">See all listings</button>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="lab">Status badges</div>
+        <div class="btn-row">
+          <span class="badge complete"><span class="d"></span>Transferred</span>
+          <span class="badge pending"><span class="d"></span>Pending ARIN</span>
+          <span class="badge review"><span class="d"></span>In review</span>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="lab">Form field</div>
+        <div class="field">
+          <label>Block size needed</label>
+          <input type="text" placeholder="e.g. /22 (1,024 IPs)">
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label>Work email</label>
+          <input type="text" placeholder="you@company.com">
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="lab">Marketplace listing card</div>
+        <div class="listing-card">
+          <div class="top">
+            <div>
+              <div class="block">104.28.0.0/22</div>
+              <div class="sub">ARIN region · Clean history</div>
+            </div>
+            <div class="price">$21.50<span>per IP</span></div>
+          </div>
+          <div class="meta-row">
+            <span>1,024 IPs</span><span>Verified seller</span><span>Ready to transfer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="marquee">
+      <span>ARIN Qualified Facilitator</span><span>RIPE NCC</span><span>APNIC</span><span>LACNIC</span><span>AFRINIC</span><span>ARIN Qualified Facilitator</span><span>RIPE NCC</span>
+    </div>
+
+    <h3 style="margin-top:44px; color:#fff;">Testimonial grid</h3>
+    <div class="test-grid">
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p>"Connexly moved our /22 through ARIN faster than we'd budgeted for."</p>
+        <div class="who">Client name</div>
+        <div class="org">Company, title</div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p>"Clear pricing, no back-and-forth — the transfer log told us exactly where things stood."</p>
+        <div class="who">Client name</div>
+        <div class="org">Company, title</div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p>"30 years in the space shows — they know the registries better than we do."</p>
+        <div class="who">Client name</div>
+        <div class="org">Company, title</div>
+      </div>
+    </div>
+
+    <div class="surface" style="margin-top:44px; padding:36px;">
+      <h3 style="margin-bottom:18px;">Transfer log table</h3>
+      <table class="log">
+        <tr><th>Transaction</th><th>Block</th><th>From</th><th>To</th><th>Status</th></tr>
+        <tr><td><code class="inline">TX-4471</code></td><td>104.28.0.0/22</td><td>Meridian Networks</td><td>Arkview Hosting</td><td><span class="badge complete"><span class="d"></span>Transferred</span></td></tr>
+        <tr><td><code class="inline">TX-4472</code></td><td>192.168.14.0/24</td><td>Cobalt Systems</td><td>Northline Data</td><td><span class="badge pending"><span class="d"></span>Pending ARIN</span></td></tr>
+        <tr><td><code class="inline">TX-4473</code></td><td>77.104.0.0/21</td><td>Vantage IX</td><td>—</td><td><span class="badge review"><span class="d"></span>In review</span></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- PATTERNS -->
+  <section id="patterns" style="border-bottom:none;">
+    <div class="eyebrow">06 — Applied patterns</div>
+    <h2>Where each surface leans</h2>
+    <p class="note" style="margin-bottom:14px;">Skewed dark: navy is now the default canvas for every page. Light only appears where the reader is doing focused, dense work — forms, tables, listing cards — matching the surface pattern above.</p>
+    <div class="surface" style="padding:36px;">
+      <table class="log">
+        <tr><th>Page</th><th>Background</th><th>Light surfaces used for</th><th>Notes</th></tr>
+        <tr><td>Home</td><td>Navy</td><td>None / all dark</td><td>Oversized headline + stat row, orange CTA, closes on a dark band</td></tr>
+        <tr><td>Marketplace</td><td>Navy</td><td>Listing cards</td><td>Reskin of <code class="inline">ipv4xchange.vercel.app</code> — cards stay light for scanability, canvas goes dark</td></tr>
+        <tr><td>Transfer Logs</td><td>Navy</td><td>Log table</td><td>Reskin of <code class="inline">/live-transfer-logs</code> — mono data inside a light surface panel</td></tr>
+        <tr><td>IPv4 Services</td><td>Navy</td><td>Tabbed form panel</td><td>Buy/Sell/Lease tabs; only the active form sits on light</td></tr>
+        <tr><td>About</td><td>Navy</td><td>Testimonial + team cards</td><td>Team photography and bios as light surface cards on dark</td></tr>
+        <tr><td>Contact</td><td>Navy</td><td>Contact form</td><td>Closing dark band, single light form surface, orange focus state</td></tr>
+      </table>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>
