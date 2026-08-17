@@ -5,7 +5,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { TestimonialMarquee } from "@/components/ui/testimonial-marquee";
 import { Marquee } from "@/components/ui/marquee";
 import { InteractiveGlobe } from "@/components/ui/interactive-globe";
-import { HeroBinaryRain } from "@/components/hero-binary-rain";
+import { HeroIpPulse } from "@/components/hero-ip-pulse";
 import { HeroHeadline } from "@/components/hero-headline";
 import { testimonials } from "@/lib/testimonials";
 import { clientLogos } from "@/lib/client-logos";
@@ -61,7 +61,7 @@ export default function Home() {
     <>
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-line-dark bg-gradient-to-b from-navy-deep to-navy">
-        <HeroBinaryRain />
+        <HeroIpPulse />
         <Container className="relative py-24 md:py-32">
           <div className="eyebrow mb-4">ARIN Qualified Facilitator</div>
           <HeroHeadline />
