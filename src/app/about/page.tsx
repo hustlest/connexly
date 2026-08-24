@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ShieldCheck } from "lucide-react";
+import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
@@ -53,9 +53,13 @@ export default function AboutPage() {
       <Container className="py-16 md:py-20">
         <Reveal>
           <div className="flex flex-col items-start gap-6 rounded-[3px] bg-navy-panel p-8 sm:flex-row sm:items-center md:p-10">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-orange/10 text-orange">
-              <ShieldCheck className="h-8 w-8" strokeWidth={1.5} aria-hidden="true" />
-            </div>
+            <Image
+              src="/arin-qualified-facilitator-badge.png"
+              alt="ARIN Qualified Facilitator badge"
+              width={96}
+              height={102}
+              className="h-24 w-auto shrink-0"
+            />
             <p className="text-[17px] font-light leading-[1.55] text-bone/85">
               <span className="font-bold text-white">ARIN Qualified Facilitator</span>{" "}
               — every Connexly transaction follows registry policy from
