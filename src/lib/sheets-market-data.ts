@@ -147,7 +147,7 @@ export async function fetchMarketDataFromSheets(): Promise<HomePageContent | nul
           buyer: "—",
           seller: "—",
           totalPrice: firstRow.rir,
-          ctaHref: "/live-transfer-logs",
+          ctaHref: "/transfer-logs",
         }
       : fallbackData.transferLog;
     const tickerItems = deriveTickerItems(boardRows);
