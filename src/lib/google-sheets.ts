@@ -1,6 +1,5 @@
 import { google } from "googleapis";
 import { existsSync, readFileSync } from "fs";
-import { join } from "path";
 
 const DEFAULT_SHEET_TAB = "Front Page";
 
@@ -47,9 +46,13 @@ function getCredentials(): ServiceAccountCreds {
     }
   }
   if (!jsonStr) {
-    const jsonPath =
-      process.env.GOOGLE_APPLICATION_CREDENTIALS ||
-      join(process.cwd(), "ipv4xchange-08a7a3d9491c.json");
+    const jsonPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+    if (!jsonPath) {
+      throw new Error(
+        "No service account credentials: set GOOGLE_SERVICE_ACCOUNT_JSON_B64, " +
+          "GOOGLE_SERVICE_ACCOUNT_JSON, or GOOGLE_APPLICATION_CREDENTIALS",
+      );
+    }
     if (!existsSync(jsonPath)) {
       throw new Error(`Service account credentials not found at ${jsonPath}`);
     }
