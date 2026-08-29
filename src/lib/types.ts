@@ -56,12 +56,11 @@ export interface Testimonial {
   quote: string;
   name: string;
   org: string;
-  isPlaceholder?: boolean;
 }
 
 export interface TeamMember {
   name: string;
   title: string;
   bio: string;
-  isPlaceholder?: boolean;
+  photo?: string;
 }

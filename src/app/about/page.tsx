@@ -35,14 +35,26 @@ export default function AboutPage() {
           <div className="mt-12 grid gap-6 sm:grid-cols-2">
             {team.map((member, i) => (
               <Reveal key={member.name} delayMs={i * 60}>
-                <div className="h-full rounded-[3px] bg-paper p-6">
-                  <div className="text-[17px] font-bold text-navy">{member.name}</div>
-                  <div className="mt-0.5 text-xs uppercase tracking-[0.05em] text-[#7C8A9A]">
-                    {member.title}
+                <div className="flex h-full items-center gap-5 rounded-[3px] bg-paper p-6">
+                  {member.photo && (
+                    <div className="relative aspect-square w-[168px] shrink-0 overflow-hidden rounded-[3px] sm:w-[192px]">
+                      <Image
+                        src={member.photo}
+                        alt={member.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                  <div>
+                    <div className="text-[17px] font-bold text-navy">{member.name}</div>
+                    <div className="mt-0.5 text-xs uppercase tracking-[0.05em] text-[#7C8A9A]">
+                      {member.title}
+                    </div>
+                    <p className="mt-3 text-sm font-light leading-[1.6] text-navy/70">
+                      {member.bio}
+                    </p>
                   </div>
-                  <p className="mt-3 text-sm font-light leading-[1.6] text-navy/70">
-                    {member.bio}
-                  </p>
                 </div>
               </Reveal>
             ))}
