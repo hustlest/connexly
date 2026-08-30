@@ -1,15 +1,24 @@
 import type { HomePageContent } from "@/types/market";
 
+/**
+ * Static content served when the live sheet is unavailable, and spread into
+ * every /api/market-data response as the base object. Site chrome (brand, nav,
+ * footer) is owned by the Nav/Footer components — these fields exist because
+ * HomePageContent requires them, so they are kept consistent with the real site
+ * rather than left pointing at another company's copy and routes.
+ */
 export const fallbackData: HomePageContent = {
-  brand: "IPv4Xchange",
+  brand: "Connexly",
   navItems: [
-    { label: "Market Pricing Board", href: "#market-pricing-board" },
-    { label: "Live Transfer Logs", href: "/live-transfer-logs" },
-    { label: "About Us", href: "/about-us" },
+    { label: "Marketplace", href: "/marketplace" },
+    { label: "Transfer Logs", href: "/transfer-logs" },
+    { label: "IPv4 Services", href: "/ipv4-services" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
   ],
-  heroTitle: "Real-Time IPv4 Market Intelligence",
+  heroTitle: "IPv4 Broker & ARIN Qualified Facilitator",
   heroSubtitle:
-    "Comprehensive pricing data from leading brokers - empowering informed decisions for commodity customers and the IPv4 market.",
+    "Connexly helps enterprises buy, sell, and lease clean IPv4 allocations across ARIN and RIPE — backed by live market data and a fully transparent transfer process.",
   tickerLabel: "Avg weekly price per subnet",
   tickerItems: [
     { block: "/24", rir: "ARIN", pricePerIp: "$28.85/IP" },
@@ -67,14 +76,14 @@ export const fallbackData: HomePageContent = {
       block: "/17",
       pricePerIp: "$15.80",
       totalPrice: "$2,070,118",
-      rir: "APNIC",
+      rir: "RIPE",
       date: "2/22/26",
     },
     {
       block: "/18",
       pricePerIp: "$15.95",
       totalPrice: "$1,045,299",
-      rir: "LACNIC",
+      rir: "ARIN",
       date: "2/22/26",
     },
     {
@@ -95,14 +104,14 @@ export const fallbackData: HomePageContent = {
       block: "/19",
       pricePerIp: "$15.65",
       totalPrice: "$128,205",
-      rir: "APNIC",
+      rir: "RIPE",
       date: "2/20/26",
     },
     {
       block: "/20",
       pricePerIp: "$16.75",
       totalPrice: "$68,608",
-      rir: "AFRINIC",
+      rir: "ARIN",
       date: "2/20/26",
     },
     {
@@ -116,7 +125,7 @@ export const fallbackData: HomePageContent = {
       block: "/22",
       pricePerIp: "$18.05",
       totalPrice: "$18,483",
-      rir: "LACNIC",
+      rir: "RIPE",
       date: "2/19/26",
     },
     {
@@ -137,7 +146,7 @@ export const fallbackData: HomePageContent = {
       block: "/23",
       pricePerIp: "$21.15",
       totalPrice: "$10,829",
-      rir: "APNIC",
+      rir: "ARIN",
       date: "2/17/26",
     },
     {
@@ -151,7 +160,7 @@ export const fallbackData: HomePageContent = {
       block: "/19",
       pricePerIp: "$15.35",
       totalPrice: "$125,747",
-      rir: "LACNIC",
+      rir: "RIPE",
       date: "2/16/26",
     },
     {
@@ -165,7 +174,7 @@ export const fallbackData: HomePageContent = {
       block: "/21",
       pricePerIp: "$17.25",
       totalPrice: "$35,328",
-      rir: "AFRINIC",
+      rir: "ARIN",
       date: "2/15/26",
     },
     {
@@ -179,7 +188,7 @@ export const fallbackData: HomePageContent = {
       block: "/18",
       pricePerIp: "$15.72",
       totalPrice: "$1,030,881",
-      rir: "APNIC",
+      rir: "RIPE",
       date: "2/14/26",
     },
     {
@@ -197,20 +206,20 @@ export const fallbackData: HomePageContent = {
     weeklyAvgPricePerIp: "$15.50",
     totalPrice: "$1,015,808",
   },
-  transferTitle: "Transfer Log Data",
+  transferTitle: "Transfer Logs",
   transferLog: {
     date: "2/15/26",
     subnet: "/16",
-    buyer: "Buyer",
-    seller: "Seller",
-    totalPrice: "RIPE",
-    ctaHref: "/live-transfer-logs",
+    buyer: "—",
+    seller: "—",
+    totalPrice: "$1,015,808",
+    ctaHref: "/transfer-logs",
   },
-  footerTagline: "Comprehensive IPv4 market intelligence.",
-  footerListOnce: "LIST ONCE. REACH MANY.",
+  footerTagline: "IPv4 broker and ARIN Qualified Facilitator.",
+  footerListOnce: "30+ YEARS NAVIGATING THE REGISTRIES.",
   footerSyndicated:
-    "Syndicated visibility across lending brokers.\nTransparent pricing. No auctions - just quotes.",
-  copyright: "©2026 IPv4Xchange. All rights reserved.",
+    "Live marketplace pricing across ARIN and RIPE.\nTransparent transfer logs, start to finish.",
+  copyright: "© 2026 Connexly. All rights reserved.",
 };
 
 async function fetchFromSheets(): Promise<HomePageContent | null> {
