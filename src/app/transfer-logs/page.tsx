@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Search public IPv4 registry transfer records across ARIN and RIPE.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function TransferLogsPage() {
   const entries = await getTransferLogs();
 

@@ -1,6 +1,4 @@
-import type { Rir } from "@/lib/types";
-
-export function RirBadge({ rir, onLight = false }: { rir: Rir; onLight?: boolean }) {
+export function RirBadge({ rir, onLight = false }: { rir: string; onLight?: boolean }) {
   return (
     <span
       className={`text-data inline-flex items-center rounded-[3px] border px-2 py-0.5 text-[11px] font-bold tracking-[0.02em] ${
