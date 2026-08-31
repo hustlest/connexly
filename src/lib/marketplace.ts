@@ -1,10 +1,11 @@
+import { cache } from "react";
 import type {
   MarketSnapshot,
   PricingBoardEntry,
   PricingBoardStats,
-  Rir,
   TickerEntry,
 } from "./types";
+import { getMarketData } from "./market-data";
 
 const SUBNET_SIZE_TO_IP_COUNT: Record<string, number> = {
   "/16": 65536,
@@ -22,86 +23,102 @@ function ipCountFor(subnet: string) {
   return SUBNET_SIZE_TO_IP_COUNT[subnet] ?? 256;
 }
 
-function boardEntry(
-  id: string,
-  subnet: string,
-  pricePerIp: number,
-  rir: Rir,
-  date: string
-): PricingBoardEntry {
-  return {
-    id,
-    subnet,
-    pricePerIp,
-    totalPrice: Math.round(pricePerIp * ipCountFor(subnet) * 100) / 100,
-    rir,
-    date,
-  };
+// The API returns pre-formatted display strings (e.g. "$17.50", "63,744")
+// everywhere; the existing components call .toFixed()/.toLocaleString() on
+// raw numbers. This strips everything but digits and the decimal point.
+function parseNumericString(value: string): number {
+  return parseFloat(value.replace(/[^0-9.]/g, "")) || 0;
 }
 
-// Mock data layer mirroring what the ported IPv4Xchange pricing feed
-// returns, so these getters can be swapped for a live fetch without
-// touching call sites.
-const PRICING_BOARD_ENTRIES: PricingBoardEntry[] = [
-  boardEntry("PB-01", "/22", 18.0, "ARIN", "8/13/26"),
-  boardEntry("PB-02", "/20", 17.25, "RIPE", "8/12/26"),
-  boardEntry("PB-03", "/22", 18.0, "ARIN", "8/11/26"),
-  boardEntry("PB-04", "/21", 17.5, "APNIC", "8/10/26"),
-  boardEntry("PB-05", "/17", 16.25, "RIPE", "8/9/26"),
-  boardEntry("PB-06", "/22", 18.0, "RIPE", "8/8/26"),
-  boardEntry("PB-07", "/23", 18.5, "RIPE", "8/7/26"),
-  boardEntry("PB-08", "/24", 22.5, "ARIN", "8/6/26"),
-  boardEntry("PB-09", "/20", 16.9, "APNIC", "8/5/26"),
-  boardEntry("PB-10", "/19", 15.75, "RIPE", "8/4/26"),
-  boardEntry("PB-11", "/18", 15.1, "APNIC", "8/3/26"),
-  boardEntry("PB-12", "/21", 18.2, "ARIN", "8/2/26"),
-  boardEntry("PB-13", "/22", 19.0, "RIPE", "7/30/26"),
-  boardEntry("PB-14", "/16", 14.5, "APNIC", "7/22/26"),
-];
+// getMarketData() hits Google Sheets / the ARIN tracker — share one fetch
+// per request across all four getters below instead of four.
+const getCachedMarketData = cache(getMarketData);
 
-const TICKER_ENTRIES: TickerEntry[] = PRICING_BOARD_ENTRIES.slice(0, 10).map((e) => ({
-  totalPrice: e.totalPrice,
-  date: e.date,
-  subnet: e.subnet,
-  rir: e.rir,
-  pricePerIp: e.pricePerIp,
-}));
-
-const MARKET_SNAPSHOT: MarketSnapshot = {
-  rir: "RIPE",
-  subnet: "/20",
-  weeklyAvgPricePerIp: 17.25,
-  totalPrice: 70656,
-  depthPercent: 62,
-  latestTransfer: {
-    date: "8/14/26",
-    subnet: "158.51.0.0/23",
-    buyer: "Arrow Datacenters Inc.",
-    seller: "Meridian Networks LLC",
-    totalPrice: 9472,
-  },
-};
+async function getBoardEntries(): Promise<PricingBoardEntry[]> {
+  const data = await getCachedMarketData();
+  return data.boardRows.map((row, i) => ({
+    id: `PB-${i + 1}`,
+    subnet: row.block,
+    pricePerIp: parseNumericString(row.pricePerIp),
+    totalPrice: parseNumericString(row.totalPrice),
+    rir: row.rir,
+    date: row.date,
+  }));
+}
 
 export async function getPricingBoardEntries(): Promise<PricingBoardEntry[]> {
-  return PRICING_BOARD_ENTRIES;
+  return getBoardEntries();
 }
 
 export async function getTickerEntries(): Promise<TickerEntry[]> {
-  return TICKER_ENTRIES;
+  const [data, entries] = await Promise.all([getCachedMarketData(), getBoardEntries()]);
+
+  return data.tickerItems.map((item) => {
+    // Ticker items carry no date/totalPrice of their own — the API derives
+    // them from a same-block boardRows entry in the first place, so recover
+    // those fields (and reuse the already-parsed price) from that sibling
+    // row rather than re-parsing item.pricePerIp's "$x.xx/IP" format.
+    const match = entries.find((e) => e.subnet === item.block);
+    if (match) {
+      return {
+        totalPrice: match.totalPrice,
+        date: match.date,
+        subnet: match.subnet,
+        rir: match.rir,
+        pricePerIp: match.pricePerIp,
+      };
+    }
+
+    const pricePerIp = parseNumericString(item.pricePerIp);
+    return {
+      totalPrice: Math.round(pricePerIp * ipCountFor(item.block) * 100) / 100,
+      date: "—",
+      subnet: item.block,
+      rir: item.rir,
+      pricePerIp,
+    };
+  });
 }
 
 export async function getMarketSnapshot(): Promise<MarketSnapshot> {
-  return MARKET_SNAPSHOT;
+  const data = await getCachedMarketData();
+  const snapshot = data.snapshot;
+  const transfer = data.transferLog;
+
+  return {
+    rir: snapshot.rir,
+    subnet: snapshot.subnet,
+    weeklyAvgPricePerIp: parseNumericString(snapshot.weeklyAvgPricePerIp),
+    totalPrice: parseNumericString(snapshot.totalPrice),
+    depthPercent: snapshot.progressPercent ?? 65,
+    latestTransfer: {
+      date: transfer.date,
+      subnet: transfer.subnet,
+      buyer: transfer.buyer,
+      seller: transfer.seller,
+      totalPrice: parseNumericString(transfer.totalPrice),
+    },
+  };
 }
 
-const PRICING_BOARD_STATS: PricingBoardStats = {
-  transfersToday: 12,
-  addressesMoved: 63744,
-  avgPricePerIp: 17.68,
-  rangeLow: 5760,
-  rangeHigh: 950272,
-};
-
 export async function getPricingBoardStats(): Promise<PricingBoardStats> {
-  return PRICING_BOARD_STATS;
+  const data = await getCachedMarketData();
+  const stats = data.stats;
+  if (!stats) {
+    return {
+      transfersToday: 0,
+      addressesMoved: 0,
+      avgPricePerIp: 0,
+      rangeLow: 0,
+      rangeHigh: 0,
+    };
+  }
+
+  return {
+    transfersToday: stats.transfersToday,
+    addressesMoved: parseNumericString(stats.addressesMoved),
+    avgPricePerIp: parseNumericString(stats.avgPricePerIp),
+    rangeLow: parseNumericString(stats.rangeLow),
+    rangeHigh: parseNumericString(stats.rangeHigh),
+  };
 }

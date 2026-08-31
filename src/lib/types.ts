@@ -6,12 +6,17 @@ export type Rir = "ARIN" | "RIPE" | "APNIC";
 // `Rir` for Marketplace, which is being wired up separately.
 export type TransferLogRir = Rir | "LACNIC" | "AFRINIC";
 
+// Same situation for the market-data feed: a live sheet could technically
+// contain LACNIC/AFRINIC. Scoped independently from TransferLogRir since
+// Marketplace and Transfer Logs are wired up and evolve separately.
+export type MarketRir = Rir | "LACNIC" | "AFRINIC";
+
 export interface PricingBoardEntry {
   id: string;
   subnet: string;
   pricePerIp: number;
   totalPrice: number;
-  rir: Rir;
+  rir: MarketRir;
   date: string;
 }
 
@@ -27,12 +32,12 @@ export interface TickerEntry {
   totalPrice: number;
   date: string;
   subnet: string;
-  rir: Rir;
+  rir: MarketRir;
   pricePerIp: number;
 }
 
 export interface MarketSnapshot {
-  rir: Rir;
+  rir: MarketRir;
   subnet: string;
   weeklyAvgPricePerIp: number;
   totalPrice: number;

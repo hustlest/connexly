@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   description: "Real-time IPv4 market pricing across ARIN, RIPE, and APNIC.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function MarketplacePage() {
   const [entries, stats, ticker, snapshot] = await Promise.all([
     getPricingBoardEntries(),
