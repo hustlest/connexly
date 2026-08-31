@@ -307,7 +307,7 @@ export async function fetchArinRipeTransferLogs(
  */
 export async function fetchLatestTransfersForSidebar(
   limit = 8,
-  ctaHref = "/live-transfer-logs",
+  ctaHref = "/transfer-logs",
 ): Promise<TransferLog[]> {
   const password = getPassword();
   if (!password) {

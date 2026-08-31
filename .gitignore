@@ -42,3 +42,16 @@ next-env.d.ts
 
 # claude code (local/machine-specific)
 .claude/settings.local.json
+
+# credentials — never commit service account keys, certs or private keys
+*service*account*.json
+*serviceaccount*.json
+client_secret*.json
+credentials*.json
+gcp-*.json
+# Google Cloud's default key filename: <project-id>-<12 hex chars>.json
+*-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].json
+*.p12
+*.pfx
+*.key
+/secrets/

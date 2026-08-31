@@ -1,5 +1,5 @@
 import type { HomePageContent, MarketSnapshot, MarketStats, PriceBoardRow, Rir } from "@/types/market";
-import { getSheetValues } from "./google-sheets";
+import { getSheetValues, tabRange } from "./google-sheets";
 import { fallbackData } from "./market-data";
 
 const VALID_RIRS: Rir[] = ["ARIN", "RIPE", "APNIC", "LACNIC", "AFRINIC"];
@@ -125,7 +125,7 @@ function deriveTickerItems(boardRows: PriceBoardRow[]) {
 
 export async function fetchMarketDataFromSheets(): Promise<HomePageContent | null> {
   try {
-    const rows = await getSheetValues("Front Page!A:E");
+    const rows = await getSheetValues(tabRange("A:E"));
     if (rows.length < 2) {
       console.log("[sheets-market-data] fetchMarketDataFromSheets: too few rows (" + rows.length + "), returning null");
       return null;
@@ -147,7 +147,7 @@ export async function fetchMarketDataFromSheets(): Promise<HomePageContent | nul
           buyer: "—",
           seller: "—",
           totalPrice: firstRow.rir,
-          ctaHref: "/live-transfer-logs",
+          ctaHref: "/transfer-logs",
         }
       : fallbackData.transferLog;
     const tickerItems = deriveTickerItems(boardRows);
