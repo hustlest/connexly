@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
+import { ScrambleHeading } from "@/components/ui/scramble-heading";
 import { team } from "@/lib/team";
 
 export const metadata: Metadata = {
@@ -15,9 +16,9 @@ export default function AboutPage() {
     <>
       <Container className="py-16 md:py-20">
         <div className="eyebrow mb-3">About</div>
-        <h1 className="max-w-[640px] text-[32px] font-light leading-[1.15] tracking-[-0.01em] text-white md:text-[40px]">
+        <ScrambleHeading className="max-w-[640px] text-[32px] font-light leading-[1.15] tracking-[-0.01em] text-white md:text-[40px]">
           Three decades in IPv4, one straightforward process
-        </h1>
+        </ScrambleHeading>
         <p className="mt-4 max-w-[620px] text-[17px] font-light leading-[1.55] text-bone/78">
           Connexly was founded to make IPv4 transactions simple,
           transparent, and fast. Based in Silicon Valley, the team has

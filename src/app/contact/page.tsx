@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { ContactForm } from "@/components/contact-form";
+import { ScrambleHeading } from "@/components/ui/scramble-heading";
 
 export const metadata: Metadata = {
   title: "Contact — Connexly",
@@ -14,9 +15,9 @@ export default function ContactPage() {
         <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
           <div>
             <div className="eyebrow mb-3">Contact</div>
-            <h1 className="text-[32px] font-light leading-[1.15] tracking-[-0.01em] text-white md:text-[40px]">
+            <ScrambleHeading className="text-[32px] font-light leading-[1.15] tracking-[-0.01em] text-white md:text-[40px]">
               Contact us
-            </h1>
+            </ScrambleHeading>
             <p className="mt-4 max-w-[440px] text-[17px] font-light leading-[1.55] text-bone/78">
               We&rsquo;d love to hear from you. Reach out directly, or send a
               message below.
