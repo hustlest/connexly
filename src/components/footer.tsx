@@ -31,8 +31,9 @@ export function Footer() {
               className="h-6 w-auto"
             />
             <p className="mt-4 max-w-[320px] text-sm font-light leading-[1.6] text-bone/60">
-              IPv4 broker and ARIN Qualified Facilitator. 30+ years navigating
-              the registries so your transfer clears clean.
+              An ARIN Qualified Facilitator with over 30 years of digital
+              infrastructure expertise, guaranteeing compliant,
+              friction-free IPv4 transfers worldwide.
             </p>
           </div>
 

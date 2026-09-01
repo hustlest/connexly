@@ -23,9 +23,9 @@ interface TabContent {
 const CONTENT: Record<Tab, TabContent> = {
   buy: {
     eyebrow: "Buy",
-    heading: "Buy IPv4 addresses with confidence",
+    heading: "Acquire IPv4 space with complete confidence",
     description:
-      "Every block Connexly sells is vetted and ARIN-clean before it ever reaches you — no surprises at transfer time. A dedicated broker manages the process from first match to final registration.",
+      "Every block facilitated by Connexly undergoes rigorous blacklist and provenance checks prior to settlement. Your dedicated broker handles escrow, compliance, and final registry updates seamlessly.",
     ctaLabel: "Browse available blocks →",
     ctaHref: "/marketplace",
     steps: [
@@ -36,9 +36,9 @@ const CONTENT: Record<Tab, TabContent> = {
   },
   sell: {
     eyebrow: "Sell",
-    heading: "Turn unused IPv4 space into working capital",
+    heading: "Maximize the value of your surplus IPv4 space",
     description:
-      "If you're holding more address space than you use, Connexly gets it in front of qualified buyers at current market pricing — discreetly, and without disrupting your network.",
+      "Transform unutilized address blocks into immediate working capital. Connexly negotiates top-tier market pricing with vetted buyers, executing every transaction confidentially and securely from valuation to closing.",
     ctaLabel: "Get a free valuation →",
     ctaHref: "/contact",
     steps: [
@@ -49,9 +49,9 @@ const CONTENT: Record<Tab, TabContent> = {
   },
   lease: {
     eyebrow: "Lease",
-    heading: "Lease IPv4 addresses without giving up long-term ownership",
+    heading: "Lease IPv4 addresses with flexible, low-commitment terms",
     description:
-      "Need address space now but not ready to sell or buy outright? Lease terms are flexible, provisioning is fast, and every agreement is ARIN-compliant.",
+      "Access the capacity you need today without the heavy capital expenditure of buying outright. We offer flexible contract terms, rapid LOA provisioning, and fully ARIN-compliant lease agreements.",
     ctaLabel: "Talk to a broker about leasing →",
     ctaHref: "/contact",
     steps: ["Tell us your capacity needs", "Get lease terms", "Provision and go live"],

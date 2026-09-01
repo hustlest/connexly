@@ -107,11 +107,12 @@ export default function Home() {
               <div>
                 <div className="eyebrow mb-5">Why Connexly</div>
                 <p className="max-w-[560px] text-[19px] font-light leading-[1.6] text-bone/80">
-                  Based in Silicon Valley, Connexly has helped hundreds of
-                  companies acquire and manage IPv4 assets over 30 years in
-                  the networking space. As an ARIN Qualified Facilitator,
-                  every transfer follows registry policy from first quote to
-                  final record.
+                  Headquartered in Silicon Valley with over three decades of
+                  networking leadership, Connexly has helped thousands of
+                  enterprises acquire, monetize, and manage IPv4 address
+                  space. As an ARIN Qualified Facilitator, every transaction
+                  is executed with full registry compliance from initial
+                  valuation to final record transfer.
                 </p>
               </div>
               <div className="flex items-center justify-center">
@@ -170,9 +171,9 @@ export default function Home() {
       <section className="bg-navy-deep">
         <Container className="flex flex-col items-center gap-6 py-20 text-center md:py-24">
           <h2 className="max-w-[480px] text-[28px] font-bold leading-[1.15] tracking-[-0.01em] text-white md:text-[34px]">
-            Ready to move IPv4 addresses?
+            Let&rsquo;s discuss your IPv4 strategy.
           </h2>
-          <Button href="/contact">Get in touch</Button>
+          <Button href="/contact">Connect with our team →</Button>
         </Container>
       </section>
     </>
