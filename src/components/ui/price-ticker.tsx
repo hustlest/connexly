@@ -1,21 +1,12 @@
 import type { TickerEntry } from "@/lib/types";
 
-function formatUsd(value: number) {
-  return `$${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-}
-
 function TickerItems({ entries }: { entries: TickerEntry[] }) {
   return (
     <>
       {entries.map((e, i) => (
-        <span key={i} className="text-data flex shrink-0 items-center gap-3 pr-10 text-[13px] text-bone/55">
-          <span className="font-bold text-white">{formatUsd(e.totalPrice)}</span>
-          <span className="text-bone/35">{e.date}</span>
-          <span className="text-bone/35">·</span>
-          <span>{e.subnet}</span>
-          <span className="text-bone/35">·</span>
+        <span key={i} className="text-data flex shrink-0 items-center gap-2 pr-10 text-[13px] text-bone/55">
+          <span className="font-bold text-white">{e.subnet}</span>
           <span className="text-orange">{e.rir}</span>
-          <span className="text-bone/35">·</span>
           <span>${e.pricePerIp.toFixed(2)}</span>
         </span>
       ))}
