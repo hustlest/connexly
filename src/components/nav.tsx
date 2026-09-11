@@ -46,8 +46,8 @@ export function Nav() {
                   toFontVariationSettings="'wght' 700"
                   staggerDuration={0.02}
                   staggerFrom="center"
-                  className={`text-sm tracking-[0.01em] transition-colors duration-200 ${
-                    active ? "text-white" : "text-bone/62 hover:text-white"
+                  className={`inline-block text-sm tracking-[0.01em] transition-transform duration-200 hover:scale-105 ${
+                    active ? "text-orange" : "text-bone"
                   }`}
                 />
               </Link>
@@ -98,7 +98,7 @@ export function Nav() {
                     href={link.href}
                     onClick={() => setOpen(false)}
                     className={`block py-2.5 text-[15px] ${
-                      active ? "text-white" : "text-bone/62"
+                      active ? "text-orange" : "text-bone"
                     }`}
                   >
                     {link.label}
