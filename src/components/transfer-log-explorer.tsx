@@ -8,7 +8,8 @@ const RIR_FILTERS: ("ALL" | Rir)[] = ["ALL", "ARIN", "RIPE"];
 const PAGE_SIZES = [10, 15, 25, 50];
 
 function parseUsDate(value: string) {
-  const [month, day, year] = value.split("/").map(Number);
+  const [month, day, yearRaw] = value.split("/").map(Number);
+  const year = yearRaw < 100 ? yearRaw + 2000 : yearRaw;
   return new Date(year, month - 1, day).getTime();
 }
 
