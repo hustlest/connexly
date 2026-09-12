@@ -43,6 +43,14 @@ export function TransferLogExplorer({ entries }: { entries: TransferLogEntry[] }
   }, [entries, rir, query, from, to]);
 
   const visible = filtered.slice(0, pageSize);
+  const hasActiveFilters = rir !== "ALL" || query !== "" || from !== "" || to !== "";
+
+  function resetFilters() {
+    setRir("ALL");
+    setQuery("");
+    setFrom("");
+    setTo("");
+  }
 
   return (
     <div>
@@ -119,6 +127,16 @@ export function TransferLogExplorer({ entries }: { entries: TransferLogEntry[] }
               className="rounded-[3px] border-[1.5px] border-navy/20 bg-white px-2 py-1 text-navy focus:border-orange focus:outline-none"
             />
           </label>
+
+          {hasActiveFilters ? (
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="text-xs font-bold uppercase tracking-[0.05em] text-orange hover:text-navy"
+            >
+              Reset filters
+            </button>
+          ) : null}
         </div>
 
         <TransferLogTable entries={visible} />
