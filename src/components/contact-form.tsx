@@ -6,24 +6,25 @@ import { TextField, SelectField, TextAreaField } from "@/components/ui/form-fiel
 
 const REASONS = ["Buy IPv4 space", "Sell IPv4 space", "Lease IPv4 space", "General question"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/moeqbzwo";
 
 interface FormState {
   [key: string]: string;
 }
 
-// UI + client-side validation only. Submission endpoint not yet chosen —
-// wire this up to the confirmed email service / API once decided.
+type Status = "idle" | "submitting" | "success" | "error";
+
 export function ContactForm() {
   const [values, setValues] = useState<FormState>({});
   const [errors, setErrors] = useState<FormState>({});
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
 
   function setField(name: string, value: string) {
     setValues((v) => ({ ...v, [name]: value }));
     if (errors[name]) setErrors((e) => ({ ...e, [name]: "" }));
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const nextErrors: FormState = {};
     ["name", "email", "reason", "message"].forEach((field) => {
@@ -33,12 +34,22 @@ export function ContactForm() {
       nextErrors.email = "Enter a valid email";
     }
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length === 0) {
-      setSubmitted(true);
+    if (Object.keys(nextErrors).length > 0) return;
+
+    setStatus("submitting");
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(values),
+      });
+      setStatus(res.ok ? "success" : "error");
+    } catch {
+      setStatus("error");
     }
   }
 
-  if (submitted) {
+  if (status === "success") {
     return (
       <div className="rounded-[3px] bg-paper p-9 text-center md:p-12">
         <div className="mb-2 text-[22px] font-bold text-navy">Message sent</div>
@@ -106,8 +117,14 @@ export function ContactForm() {
         onChange={(e) => setField("message", e.target.value)}
         error={errors.message}
       />
-      <Button type="submit" className="sm:col-span-2">
-        Send message
+      {status === "error" ? (
+        <p className="text-sm text-[#C0442A] sm:col-span-2">
+          Something went wrong sending your message — please try again, or
+          email us directly at sales@connexly.com.
+        </p>
+      ) : null}
+      <Button type="submit" disabled={status === "submitting"} className="sm:col-span-2">
+        {status === "submitting" ? "Sending…" : "Send message"}
       </Button>
     </form>
   );
