@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import type { Rir, TransferLogEntry } from "@/lib/types";
 import { TransferLogTable } from "@/components/ui/transfer-log-table";
 
-const RIR_FILTERS: ("ALL" | Rir)[] = ["ALL", "ARIN", "RIPE"];
+const RIR_FILTERS: ("ALL" | Rir)[] = ["ALL", "ARIN", "RIPE", "APNIC"];
 const PAGE_SIZES = [10, 15, 25, 50];
 
 function parseUsDate(value: string) {
@@ -52,7 +52,9 @@ export function TransferLogExplorer({ entries }: { entries: TransferLogEntry[] }
     const toTime = to ? new Date(to).getTime() : null;
 
     return entries.filter((e) => {
-      if (rir !== "ALL" && e.sourceRir !== rir && e.recipientRir !== rir) return false;
+      if (rir !== "ALL" && !e.sourceRir.startsWith(rir) && !e.recipientRir.startsWith(rir)) {
+        return false;
+      }
       if (
         q &&
         !e.ipv4Range.toLowerCase().includes(q) &&
