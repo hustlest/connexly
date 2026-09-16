@@ -1,8 +1,10 @@
 import type { TransferLogEntry } from "./types";
 import { fetchArinRipeTransferLogs } from "./arin-transfer-log";
 
+const PER_RIR_LIMIT = 200;
+
 export async function getTransferLogs(): Promise<TransferLogEntry[]> {
-  const rows = await fetchArinRipeTransferLogs();
+  const rows = await fetchArinRipeTransferLogs(PER_RIR_LIMIT);
   return rows.map((row, i) => ({
     id: `TL-${i + 1}`,
     transferDate: row.transferDate,

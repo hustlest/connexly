@@ -19,6 +19,32 @@ export function TransferLogExplorer({ entries }: { entries: TransferLogEntry[] }
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [pageSize, setPageSize] = useState(15);
+  const [page, setPage] = useState(0);
+
+  function setRirAndResetPage(r: "ALL" | Rir) {
+    setRir(r);
+    setPage(0);
+  }
+
+  function setQueryAndResetPage(value: string) {
+    setQuery(value);
+    setPage(0);
+  }
+
+  function setFromAndResetPage(value: string) {
+    setFrom(value);
+    setPage(0);
+  }
+
+  function setToAndResetPage(value: string) {
+    setTo(value);
+    setPage(0);
+  }
+
+  function setPageSizeAndResetPage(size: number) {
+    setPageSize(size);
+    setPage(0);
+  }
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -42,7 +68,10 @@ export function TransferLogExplorer({ entries }: { entries: TransferLogEntry[] }
     });
   }, [entries, rir, query, from, to]);
 
-  const visible = filtered.slice(0, pageSize);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, totalPages - 1);
+  const pageStart = currentPage * pageSize;
+  const visible = filtered.slice(pageStart, pageStart + pageSize);
   const hasActiveFilters = rir !== "ALL" || query !== "" || from !== "" || to !== "";
 
   function resetFilters() {
@@ -50,6 +79,7 @@ export function TransferLogExplorer({ entries }: { entries: TransferLogEntry[] }
     setQuery("");
     setFrom("");
     setTo("");
+    setPage(0);
   }
 
   return (
@@ -60,7 +90,7 @@ export function TransferLogExplorer({ entries }: { entries: TransferLogEntry[] }
             <button
               key={r}
               type="button"
-              onClick={() => setRir(r)}
+              onClick={() => setRirAndResetPage(r)}
               className={`text-data rounded-[3px] border px-3 py-1.5 text-xs font-bold tracking-[0.02em] transition-colors duration-200 ${
                 rir === r
                   ? "border-orange bg-orange text-white"
@@ -84,7 +114,7 @@ export function TransferLogExplorer({ entries }: { entries: TransferLogEntry[] }
           <input
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => setQueryAndResetPage(e.target.value)}
             placeholder="Search any subnet or org"
             className="w-full rounded-[3px] border-[1.5px] border-bone/30 bg-white/[0.04] py-2 pl-9 pr-3 text-sm text-white placeholder:text-bone/40 focus:border-orange focus:outline-none"
           />
@@ -97,7 +127,7 @@ export function TransferLogExplorer({ entries }: { entries: TransferLogEntry[] }
             Show
             <select
               value={pageSize}
-              onChange={(e) => setPageSize(Number(e.target.value))}
+              onChange={(e) => setPageSizeAndResetPage(Number(e.target.value))}
               className="rounded-[3px] border-[1.5px] border-navy/20 bg-white px-2 py-1 text-navy focus:border-orange focus:outline-none"
             >
               {PAGE_SIZES.map((size) => (
@@ -114,7 +144,7 @@ export function TransferLogExplorer({ entries }: { entries: TransferLogEntry[] }
             <input
               type="date"
               value={from}
-              onChange={(e) => setFrom(e.target.value)}
+              onChange={(e) => setFromAndResetPage(e.target.value)}
               className="rounded-[3px] border-[1.5px] border-navy/20 bg-white px-2 py-1 text-navy focus:border-orange focus:outline-none"
             />
           </label>
@@ -123,7 +153,7 @@ export function TransferLogExplorer({ entries }: { entries: TransferLogEntry[] }
             <input
               type="date"
               value={to}
-              onChange={(e) => setTo(e.target.value)}
+              onChange={(e) => setToAndResetPage(e.target.value)}
               className="rounded-[3px] border-[1.5px] border-navy/20 bg-white px-2 py-1 text-navy focus:border-orange focus:outline-none"
             />
           </label>
@@ -141,8 +171,33 @@ export function TransferLogExplorer({ entries }: { entries: TransferLogEntry[] }
 
         <TransferLogTable entries={visible} />
 
-        <div className="mt-4 text-xs text-navy/45">
-          Showing {visible.length === 0 ? 0 : 1}–{visible.length} of {filtered.length}
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="text-xs text-navy/45">
+            Showing {visible.length === 0 ? 0 : pageStart + 1}–{pageStart + visible.length} of{" "}
+            {filtered.length}
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={currentPage === 0}
+              className="rounded-[3px] border-[1.5px] border-navy/20 px-3 py-1.5 text-xs font-bold text-navy transition-colors duration-200 hover:border-navy/40 disabled:opacity-40 disabled:pointer-events-none"
+            >
+              Prev
+            </button>
+            <span className="text-xs text-navy/60">
+              Page {currentPage + 1} of {totalPages}
+            </span>
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+              disabled={currentPage >= totalPages - 1}
+              className="rounded-[3px] border-[1.5px] border-navy/20 px-3 py-1.5 text-xs font-bold text-navy transition-colors duration-200 hover:border-navy/40 disabled:opacity-40 disabled:pointer-events-none"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>
