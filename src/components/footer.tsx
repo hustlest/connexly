@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import { SHOW_MARKETPLACE_LINK } from "@/lib/site-flags";
 import { Container } from "./ui/container";
 
 const PRODUCT_LINKS = [
   { href: "/marketplace", label: "Marketplace" },
   { href: "/transfer-logs", label: "Transfer Logs" },
   { href: "/ipv4-services", label: "IPv4 Services" },
-];
+].filter((link) => link.href !== "/marketplace" || SHOW_MARKETPLACE_LINK);
 
 const COMPANY_LINKS = [
   { href: "/about", label: "About" },

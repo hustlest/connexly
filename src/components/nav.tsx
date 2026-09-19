@@ -4,10 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { SHOW_MARKETPLACE_LINK } from "@/lib/site-flags";
 import { Button } from "./ui/button";
 import { VariableFontHover } from "./ui/variable-font-hover";
 
-const LINKS = [
+const ALL_LINKS = [
   { href: "/", label: "Home" },
   { href: "/marketplace", label: "Marketplace" },
   { href: "/transfer-logs", label: "Transfer Logs" },
@@ -15,6 +16,10 @@ const LINKS = [
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
+
+const LINKS = ALL_LINKS.filter(
+  (link) => link.href !== "/marketplace" || SHOW_MARKETPLACE_LINK,
+);
 
 export function Nav() {
   const pathname = usePathname();

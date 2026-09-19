@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { SHOW_MARKETPLACE_LINK } from "@/lib/site-flags";
 
 type Tab = "buy" | "sell" | "lease";
 
@@ -16,7 +17,7 @@ interface TabContent {
   heading: string;
   description: string;
   ctaLabel: string;
-  ctaHref: string;
+  ctaHref: string | null;
   steps: [string, string, string];
 }
 
@@ -27,7 +28,7 @@ const CONTENT: Record<Tab, TabContent> = {
     description:
       "Every block facilitated by Connexly undergoes rigorous blacklist and provenance checks prior to settlement. Your dedicated broker handles escrow, compliance, and final registry updates seamlessly.",
     ctaLabel: "Browse available blocks →",
-    ctaHref: "/marketplace",
+    ctaHref: SHOW_MARKETPLACE_LINK ? "/marketplace" : null,
     steps: [
       "Browse or request a match",
       "Get a quote",
@@ -90,9 +91,11 @@ export function Ipv4ServicesTabs({ initialTab = "buy" }: { initialTab?: Tab }) {
         <p className="mt-4 max-w-[640px] text-[15px] font-light leading-[1.6] text-bone/70">
           {content.description}
         </p>
-        <Button href={content.ctaHref} className="mt-6">
-          {content.ctaLabel}
-        </Button>
+        {content.ctaHref ? (
+          <Button href={content.ctaHref} className="mt-6">
+            {content.ctaLabel}
+          </Button>
+        ) : null}
 
         <div className="mt-10 grid gap-6 border-t border-line-dark pt-8 sm:grid-cols-3">
           {content.steps.map((step, i) => (

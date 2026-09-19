@@ -9,6 +9,7 @@ import { HeroIpPulse } from "@/components/hero-ip-pulse";
 import { HeroHeadline } from "@/components/hero-headline";
 import { testimonials } from "@/lib/testimonials";
 import { clientLogos } from "@/lib/client-logos";
+import { SHOW_MARKETPLACE_LINK } from "@/lib/site-flags";
 
 function initialsAvatar(name: string) {
   const initials = name
@@ -71,8 +72,10 @@ export default function Home() {
             market data and a fully transparent transfer process.
           </p>
           <div className="mt-9 flex flex-wrap gap-4">
-            <Button href="/marketplace">Browse the Marketplace</Button>
-            <Button href="/contact" variant="secondary">
+            {SHOW_MARKETPLACE_LINK ? (
+              <Button href="/marketplace">Browse the Marketplace</Button>
+            ) : null}
+            <Button href="/contact" variant={SHOW_MARKETPLACE_LINK ? "secondary" : "primary"}>
               Talk to a Broker
             </Button>
           </div>
