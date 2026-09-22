@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { TransferLogExplorer } from "@/components/transfer-log-explorer";
-import { getTransferLogs } from "@/lib/transfer-logs";
 
 export const metadata: Metadata = {
   title: "Transfer Logs — Connexly",
-  description: "Search public IPv4 registry transfer records across ARIN and RIPE.",
+  description: "Search public IPv4 registry transfer records across ARIN, RIPE, and APNIC.",
 };
 
-export const dynamic = "force-dynamic";
-
-export default async function TransferLogsPage() {
-  const entries = await getTransferLogs();
-
+export default function TransferLogsPage() {
   return (
     <Container className="py-16 md:py-20">
       <h1 className="text-[32px] font-light leading-[1.1] tracking-[-0.01em] text-white md:text-[44px]">
@@ -23,7 +18,7 @@ export default async function TransferLogsPage() {
       </p>
 
       <div className="mt-10">
-        <TransferLogExplorer entries={entries} />
+        <TransferLogExplorer />
       </div>
     </Container>
   );

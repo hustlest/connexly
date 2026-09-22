@@ -1,4 +1,4 @@
-import type { TransferLogEntry } from "@/lib/types";
+import type { TransferLogEntry } from "@/lib/transfer-log-static";
 import { RirBadge } from "./rir-badge";
 
 const HEADERS = [
@@ -12,9 +12,15 @@ const HEADERS = [
   "Recipient RIR",
 ];
 
-export function TransferLogTable({ entries }: { entries: TransferLogEntry[] }) {
+export function TransferLogTable({
+  entries,
+  loading = false,
+}: {
+  entries: TransferLogEntry[];
+  loading?: boolean;
+}) {
   return (
-    <div className="overflow-x-auto">
+    <div className={`overflow-x-auto ${loading ? "opacity-60 transition-opacity" : ""}`}>
       <table className="w-full min-w-[900px] border-collapse text-sm">
         <thead>
           <tr>
@@ -29,12 +35,19 @@ export function TransferLogTable({ entries }: { entries: TransferLogEntry[] }) {
           </tr>
         </thead>
         <tbody>
-          {entries.map((entry) => (
-            <tr key={entry.id} className="border-b border-line-light">
+          {entries.map((entry, i) => (
+            <tr
+              key={`${entry.transferDate}-${entry.ipv4Range}-${i}`}
+              className="border-b border-line-light"
+            >
               <td className="text-data py-3 pr-4 text-[#33465C]">{entry.transferDate}</td>
-              <td className="text-data py-3 pr-4 font-bold text-navy">{entry.ipv4Range}</td>
-              <td className="py-3 pr-4 text-[#33465C]">{entry.recipientOrg}</td>
-              <td className="py-3 pr-4 text-[#33465C]">{entry.sourceOrg}</td>
+              <td className="text-data py-3 pr-4 font-bold text-navy">
+                {entry.ipv4Range.split("\n").map((line, j) => (
+                  <div key={j}>{line}</div>
+                ))}
+              </td>
+              <td className="py-3 pr-4 text-[#33465C]">{entry.recipientOrganization}</td>
+              <td className="py-3 pr-4 text-[#33465C]">{entry.sourceOrganization}</td>
               <td className="text-data py-3 pr-4 text-[#33465C]/70 italic">
                 {entry.registrationDate}
               </td>
@@ -54,7 +67,7 @@ export function TransferLogTable({ entries }: { entries: TransferLogEntry[] }) {
           {entries.length === 0 ? (
             <tr>
               <td colSpan={HEADERS.length} className="py-10 text-center text-sm text-navy/45">
-                No transfers match these filters.
+                {loading ? "Loading transfer records…" : "No transfers match these filters."}
               </td>
             </tr>
           ) : null}

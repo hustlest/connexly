@@ -1,11 +1,5 @@
 export type Rir = "ARIN" | "RIPE" | "APNIC";
 
-// The live transfer-log feed's RIR union is wider than the rest of the
-// site's (it also reports LACNIC/AFRINIC), even though in practice it only
-// ever queries ARIN and RIPE. Scoped to transfer logs so it doesn't widen
-// `Rir` for Marketplace, which is being wired up separately.
-export type TransferLogRir = Rir | "LACNIC" | "AFRINIC";
-
 // Same situation for the market-data feed: a live sheet could technically
 // contain LACNIC/AFRINIC. Scoped independently from TransferLogRir since
 // Marketplace and Transfer Logs are wired up and evolve separately.
@@ -49,18 +43,6 @@ export interface MarketSnapshot {
     seller: string;
     totalPrice: number;
   };
-}
-
-export interface TransferLogEntry {
-  id: string;
-  transferDate: string;
-  ipv4Range: string;
-  recipientOrg: string;
-  sourceOrg: string;
-  registrationDate: string;
-  transferType: string;
-  sourceRir: TransferLogRir;
-  recipientRir: TransferLogRir;
 }
 
 export interface Testimonial {
